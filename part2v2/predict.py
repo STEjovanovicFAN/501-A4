@@ -25,15 +25,8 @@ def predict(model, class_names, img, true_label):
     #Replace these two lines with code to make a prediction
     prediction = model.predict(img)[0]
 
-    #prediction = [img[0]/10,img[1]/10,img[2]/10,img[3]/10,img[4]/10,img[5]/10,img[6]/10,img[7]/10,img[8]/10,img[9]/10]
-    #print(prediction)
-    #print(img[0])
-
     #Determine what the predicted label is
     predicted_label = np.argmax(predict)
-    
-    #print("#################################")
-    #print(predicted_label)
 
     plot(class_names, prediction, true_label, predicted_label, img[0])
     plt.show()

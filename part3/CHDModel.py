@@ -31,14 +31,7 @@ def show_batch(dataset):
     for key, value in batch.items():
       print("{:20s}: {}".format(key,value.numpy()))    
 
-
-#show_batch(raw_train_data)
-#CSV_COLUMNS = ['row.names', 'sbp', 'tobacco', 'ldl', 'adiposity', 'famhist', 'typea', 'obesity', 'alcohol', 'age', 'chd']
-#temp_dataset = get_dataset(train_file_path, column_names=CSV_COLUMNS)
-#show_batch(temp_dataset)
 SELECT_COLUMNS = ['sbp', 'tobacco', 'ldl', 'adiposity', 'typea','obesity','alcohol','age']
-#temp_dataset = get_dataset(train_file_path)
-#temp_dataset = get_dataset(train_file_path, select_columns=SELECT_COLUMNS)
 temp_train_data = get_dataset(train_file_path)
 temp_test_data = get_dataset(train_file_path)
 #show_batch(temp_train_data)
@@ -66,7 +59,6 @@ MEAN = np.array(desc.T['mean'])
 STD = np.array(desc.T['std'])
 
 def normalize_numeric_data(data, mean, std):
-  # Center the data
   return (data-mean)/std
 
 normalizer = functools.partial(normalize_numeric_data, mean=MEAN, std=STD)
@@ -105,31 +97,17 @@ model = tf.keras.Sequential([
                 activation='elu'),
   tf.keras.layers.Dropout(0.5),
   tf.keras.layers.Dense(1, activation='sigmoid')
-
-  #tf.keras.layers.Dense(64, activation='elu', input_shape=(28,)),
-  #tf.keras.layers.Dense(64, activation='elu'),
-  #tf.keras.layers.Dense(64, activation='elu'),
-  #tf.keras.layers.Dense(1, activation='sigmoid')
-  
-  #tf.keras.layers.Dense(128, activation='relu'),
-  #tf.keras.layers.Dense(128, activation='relu'),
-  #tf.keras.layers.Dense(1, activation='sigmoid'),
 ])
 
 model.compile(optimizer=tf.keras.optimizers.Adam(lr_schedule),
                 #optimizer='adam',
                 loss='binary_crossentropy',
                 metrics=['accuracy', 'binary_crossentropy'])
-#model.compile(
-#    loss='binary_crossentropy',
-#    optimizer='adam',
-#    metrics=['accuracy'])
 
 train_data = packed_train_data.shuffle(500)
 test_data = packed_test_data.shuffle(500)
 
 model.fit(train_data, epochs=20,steps_per_epoch=128)
-
 
 print('\n~~~~~~~~EvaluatingModel~~~~~~~~~')
 print("Evaluating Train Data:")
